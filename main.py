@@ -7,7 +7,7 @@ from PyQt5.QtGui import *
 
 
 
-class Dialog(QWidget):
+class Dialog(QDialog):
     def __init__(self):
         super().__init__()
         pass
@@ -15,9 +15,9 @@ class Dialog(QWidget):
     def connect(self):
         pass
 
-class OptionsDialog(QDialog):
+class OptionsDialog(Dialog):
     def __init__(self, parent=None):
-        super().__init__(parent)
+        super().__init__()
         self.setWindowTitle('QDialog')
 
         dlgLayout = QVBoxLayout()
@@ -103,15 +103,18 @@ class SimWindow(QMainWindow):
         self.generalLayout.addLayout(self.toolbars)
         self.generalLayout.setAlignment(self.toolbars, Qt.AlignTop)
     
+ 
+
+
+    def _createDisplay(self):
+        pass
+
+
     def toggleOptionWindow(self, checked):
         if(self.options.isVisible()):
             self.options.hide()
         else:
             self.options.show()
-
-
-    def _createDisplay(self):
-        pass
 
 styleSheet = """
     SimWindow {
