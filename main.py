@@ -1,22 +1,65 @@
 import sys
+from turtle import isvisible
 
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 
 
-class Diolog:
+
+class Dialog(QWidget):
     def __init__(self):
+        super().__init__()
         pass
     
     def connect(self):
         pass
 
+class OptionsDialog(QDialog):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.setWindowTitle('QDialog')
+
+        dlgLayout = QVBoxLayout()
+
+        formLayout = QFormLayout()
+        formLayout.addRow('Main Time Step(dt):', self.createLineCombox())
+        formLayout.addRow('Simulation Time:', self.createLineCombox())
+        dlgLayout.addLayout(formLayout)
+
+        btns = QDialogButtonBox()
+        btns.setStandardButtons(
+            QDialogButtonBox.Cancel | QDialogButtonBox.Ok)
+        btns.clicked.connect(self.close)
+        dlgLayout.addWidget(btns)
+
+        self.setLayout(dlgLayout)
+
+    
+    def createTimeBox(self):
+        comboBox = QComboBox()
+            # self.comboBox.setGeometry(QRect(40, 40, 491, 31))
+        comboBox.setObjectName(("Time Dimensions"))
+        comboBox.addItem("ms")
+        comboBox.addItem("s")
+        comboBox.addItem("m")
+        comboBox.addItem("h")
+
+        return comboBox
+
+    def createLineCombox(self):
+        lineCombo = QHBoxLayout()
+        lineCombo.addWidget(QLineEdit())
+        lineCombo.addWidget(self.createTimeBox())
+
+        return lineCombo
+
+
 class PushButton:
     def __init__(self, message, max_width, min_width=None):
         self.button = QPushButton(message)
         self.button.setMaximumWidth(max_width)
-        self.button.setMinimumWidth(len(message)* 10 +7)
+        self.button.setMinimumWidth(len(message)* 10 +7)       
         
     def getButton(self):
         return self.button
@@ -47,14 +90,26 @@ class SimWindow(QMainWindow):
         self._createDisplay()
 
     def _createToolBars(self):
+        self.optionButton = PushButton('Options', 100).getButton()
+
         self.toolbars = QHBoxLayout()
         self.toolbars.addWidget(PushButton('Model', 100, 50).getButton())
-        self.toolbars.addWidget(PushButton('Options', 100).getButton())
+        self.toolbars.addWidget(self.optionButton)
         self.toolbars.addWidget(PushButton('Simulate', 100).getIcon('./images/play_icon.png'))
+
+        self.options = OptionsDialog()
+        self.optionButton.clicked.connect(self.toggleOptionWindow)
 
         self.generalLayout.addLayout(self.toolbars)
         self.generalLayout.setAlignment(self.toolbars, Qt.AlignTop)
     
+    def toggleOptionWindow(self, checked):
+        if(self.options.isVisible()):
+            self.options.hide()
+        else:
+            self.options.show()
+
+
     def _createDisplay(self):
         pass
 
