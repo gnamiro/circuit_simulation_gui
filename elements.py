@@ -11,17 +11,18 @@ class Node:
         self.x = x
         self.y = y
         self.connectionList = connectionList
-
+        
         self.im = QPixmap(NodeInPath)
         self.label = QLabel(parent=parent)
         self.label.setPixmap(self.im)
         self.label.setGeometry(self.x, self.y, self.im.width(), self.im.height())
         self.label.setScaledContents(True)
+        self.center = (self.x + self.im.width()/2 , self.y + self.im.height()/2)
 
     def draw(self):
         return self.label
 
-    def getConnection(self):
+    def getConnections(self):
         return self.connectionList
 
 

@@ -148,20 +148,23 @@ class SimWindow(QMainWindow):
         qp.end()
 
     def drawLines(self, qp):
-        pen = QPen(Qt.black, 2, Qt.SolidLine)
+        
+        pen = QPen(Qt.blue, 3, Qt.SolidLine)
         qp.setPen(pen)
 
         for element in self.elementsList:
             elementConnectionList = element.getConnections()
             for connection in elementConnectionList:
                 if(isinstance(connection, tuple)):
-                    pass
+                    otherElement1 = self.elementsList[connection[0]]
+                    otherElement2 = self.elementsList[connection[1]]
+                    avgCenterX = (otherElement1.center[0] + otherElement2.center[0])/2
+                    avgCenterY = (otherElement2.center[1] + otherElement2.center[1])/2
+                    qp.drawLine(element.center[0], element.center[1], avgCenterX, avgCenterY)
                 else:
-                    qp.drawLines(element.x, element.y,
-                     self.elementsList[connection].x, self.elementsList[connection].y)
-
-        # qp.drawLine(20, 40, 250, 40)
-        # qp.drawLine(250, 40, 250, 250)
+                    otherElement = self.elementsList[connection]
+                    qp.drawLine(element.center[0], element.center[1],
+                     otherElement.center[0], otherElement.center[1])
 
     def _createDisplay(self, fileName):
         elementData = read_csv_file(fileName)
