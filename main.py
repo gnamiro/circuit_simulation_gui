@@ -7,7 +7,7 @@ from PyQt5.QtGui import *
 import tkinter
 from tkinter.filedialog import askopenfilename
 
-import elements
+from elements import *
 
 import csv
 import ast
@@ -17,12 +17,10 @@ def read_csv_file(filename):
     with open(filename, newline='') as f:
         reader = csv.reader(f)
         data = list(reader)
-    
 
     for i in range(len(data)):
         data[i][-1] = ast.literal_eval(data[i][-1])
-
-    print(type(data[0][1]))
+        data[i][1], data[i][2] = int(data[i][1]), int(data[i][2])
 
     return data
 
@@ -75,8 +73,8 @@ class PushButton:
     def __init__(self, message, max_width, min_width=None):
         self.button = QPushButton(message)
         self.button.setMaximumWidth(max_width)
-        self.button.setMinimumWidth(len(message)* 10 +7)       
-        
+        self.button.setMinimumWidth(len(message)* 10 +7)  
+
     def getButton(self):
         return self.button
 
@@ -102,7 +100,17 @@ class SimWindow(QMainWindow):
         self._centralWidget.setLayout(self.generalLayout)
 
         self._createToolBars()
-        # self._createDisplay()
+
+        self.elementFactory = {
+            'VS': VS,
+            'Ground': Ground,
+            'T2C': Transformer2Coil,
+            'T3C': Transformer3Coil,
+            'VT': VT,
+            'CT': CT,
+            'transferLine': TransferLine,
+            'Bus': Bus
+        }
 
     def _createToolBars(self):
         self.optionButton = PushButton('Options', 100).getButton()
@@ -120,9 +128,20 @@ class SimWindow(QMainWindow):
         self.generalLayout.addLayout(self.toolbars)
         self.generalLayout.setAlignment(self.toolbars, Qt.AlignTop)
      
+    
     def _createDisplay(self, fileName):
-        elementsList = read_csv_file(fileName)
-
+        elementData = read_csv_file(fileName)
+        print(self)
+        self.elementsList = []
+        self.im = QPixmap('./images/bus.png')
+        self.label = QLabel(parent=self.generalLayout)
+        self.label.setPixmap(self.im)
+        self.label.setGeometry(100, 100, self.im.width(), self.im.height())
+        self.label.setScaledContents(True)
+        # for element in elementData:
+        #     _element = self.elementFactory[element[0]](self, element[1], element[2], element[3])
+        #     self.elementsList.append(_element)
+        #     _element.draw()
 
 
 
@@ -135,7 +154,7 @@ class SimWindow(QMainWindow):
     def getFileDialogWindow(self, checked):
         root = tkinter.Tk()
         root.withdraw()
-        fileName = askopenfilename(initialdir="/", title='Choose Generator.csv')
+        fileName = askopenfilename(initialdir="./", title='Choose Generator.csv')
         self._createDisplay(fileName)
 
 styleSheet = """
