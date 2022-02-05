@@ -4,6 +4,11 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 
+import tkinter
+# import tkFileDialog
+
+import elements
+
 
 
 class Dialog(QDialog):
@@ -14,7 +19,7 @@ class Dialog(QDialog):
 class OptionsDialog(Dialog):
     def __init__(self, parent=None):
         super().__init__()
-        self.setWindowTitle('QDialog')
+        self.setWindowTitle('Options')
 
         dlgLayout = QVBoxLayout()
 
@@ -87,14 +92,16 @@ class SimWindow(QMainWindow):
 
     def _createToolBars(self):
         self.optionButton = PushButton('Options', 100).getButton()
+        self.modelButton = PushButton('Model', 100, 50).getButton()
 
         self.toolbars = QHBoxLayout()
-        self.toolbars.addWidget(PushButton('Model', 100, 50).getButton())
+        self.toolbars.addWidget(self.modelButton)
         self.toolbars.addWidget(self.optionButton)
         self.toolbars.addWidget(PushButton('Simulate', 100).getIcon('./images/play_icon.png'))
 
         self.options = OptionsDialog()
         self.optionButton.clicked.connect(self.toggleOptionWindow)
+        self.modelButton.clicked.connect(self.getFileDialogWindow)
 
         self.generalLayout.addLayout(self.toolbars)
         self.generalLayout.setAlignment(self.toolbars, Qt.AlignTop)
@@ -108,6 +115,12 @@ class SimWindow(QMainWindow):
             self.options.hide()
         else:
             self.options.show()
+
+    def getFileDialogWindow(self, checked):
+        root = tkinter.Tk()
+        root.withdraw()
+        self.filename = tkinter.filedialog.askopenfilename(initialdir="/", title='Choose Generator.csv')
+
 
 styleSheet = """
     SimWindow {

@@ -1,6 +1,7 @@
 import sys
 from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QHBoxLayout, QWidget
-from PyQt5.QtGui import QPixmap
+from PyQt5.QtGui import *
+from PyQt5.QtCore import *
 
 class Node:
     def __init__(self):
@@ -12,9 +13,11 @@ class Node:
         self.connectionList = connectionList
 
         self.im = QPixmap(NodeImPath)
+        # self.im = self.im.scaled(100, 50, Qt.KeepAspectRatio)
         self.label = QLabel(parent=parent)
         self.label.setPixmap(self.im)
-        self.label.move(self.x, self.y)
+        self.label.setGeometry(self.x, self.y, 50, 60)
+        self.label.setScaledContents(True)
 
     def draw(self):
         return self.label
@@ -66,16 +69,35 @@ if __name__ == '__main__':
     window.setWindowTitle('Elements Test Window')
     window.setGeometry(100, 100, 640, 640)
     window.move(60, 15)
-    # layout = QHBoxLayout()
-    label = Transfer_line(window, 10, 500 , []).draw()
+    layout = QHBoxLayout()
+
+    label = Transfer_line(window, 500, 600 , []).draw()
     label1 = CT(window, 100, 300 , []).draw()
     label2 = Bus(window, 150, 550 , []).draw()
     label3 = Ground(window, 100, 350 , []).draw()
     label4 = Transformer2Coil(window, 200, 500 , []).draw()
-    label5 = Transformer3Coil(window, 250, 500 , []).draw()
-    label6 = VSource(window, 300, 500 , []).draw()
-    # layout.addWidget(label)
-    # window.setLayout(layout)
+    label5 = Transformer3Coil(window, 350, 500 , []).draw()
+    label6 = VSource(window, 450, 500 , []).draw()
+    label7 = VT(window, 50, 200 , []).draw()
+    layout.addWidget(label)
+    layout.addWidget(label1)
+    layout.addWidget(label2)
+    layout.addWidget(label3)
+    layout.addWidget(label4)
+    layout.addWidget(label5)
+    layout.addWidget(label6)
+    # qp = QPainter()
+    # qp.begin(window)
+    # qp.setRenderHint(QPainter.Antialiasing)
+    # path = QPainterPath()
+    # path.moveTo(30, 30)
+    # path.cubicTo(30, 30, 200, 350, 350, 30)
+
+    # qp.drawPath(path)
+    window.setLayout(layout)
+
+    
+    
 
     # helloMsg = QLabel('<h1>Hello from outside</h1>', parent=window)
     # helloMsg.move(60, 15)
