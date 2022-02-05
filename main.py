@@ -1,5 +1,4 @@
 import sys
-from turtle import isvisible
 
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
@@ -10,9 +9,6 @@ from PyQt5.QtGui import *
 class Dialog(QDialog):
     def __init__(self):
         super().__init__()
-        pass
-    
-    def connect(self):
         pass
 
 class OptionsDialog(Dialog):
@@ -102,10 +98,7 @@ class SimWindow(QMainWindow):
 
         self.generalLayout.addLayout(self.toolbars)
         self.generalLayout.setAlignment(self.toolbars, Qt.AlignTop)
-    
- 
-
-
+     
     def _createDisplay(self):
         pass
 
