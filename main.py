@@ -24,6 +24,16 @@ def read_csv_file(filename):
 
     return data
 
+def write_config_file(filePath):
+    f = open("configFile.txt", "w")
+    f.write(filePath)
+    f.close()
+
+def read_config_file():
+    f = open('configFile.txt', "r")
+    # print(f.read())
+    return f.read()
+
 class Dialog(QDialog):
     def __init__(self):
         super().__init__()
@@ -91,9 +101,10 @@ class SimWindow(QMainWindow):
     def __init__(self, parent=None):
         super().__init__()
         self.setWindowTitle('Simulator')
+        
+        self.fileName = read_config_file()
 
         self.generalLayout = QVBoxLayout()
-        
         self._centralWidget = QWidget(self)
         self.setCentralWidget(self._centralWidget)
 
@@ -111,6 +122,8 @@ class SimWindow(QMainWindow):
             'transferLine': TransferLine,
             'Bus': Bus
         }
+        print(self.fileName)
+        self._createDisplay(self.fileName)
 
     def _createToolBars(self):
         self.optionButton = PushButton('Options', 100).getButton()
@@ -133,16 +146,13 @@ class SimWindow(QMainWindow):
         elementData = read_csv_file(fileName)
         print(self)
         self.elementsList = []
-        self.im = QPixmap('./images/bus.png')
-        self.label = QLabel(parent=self.generalLayout)
-        self.label.setPixmap(self.im)
-        self.label.setGeometry(100, 100, self.im.width(), self.im.height())
-        self.label.setScaledContents(True)
-        # for element in elementData:
-        #     _element = self.elementFactory[element[0]](self, element[1], element[2], element[3])
-        #     self.elementsList.append(_element)
-        #     _element.draw()
 
+        for element in elementData:
+            _element = self.elementFactory[element[0]](self, element[1], element[2], element[3])
+            self.elementsList.append(_element)
+            # self.generalLayout.addWidget(_element.draw())
+
+        # self._centralWidget.update()
 
 
     def toggleOptionWindow(self, checked):
@@ -154,8 +164,10 @@ class SimWindow(QMainWindow):
     def getFileDialogWindow(self, checked):
         root = tkinter.Tk()
         root.withdraw()
-        fileName = askopenfilename(initialdir="./", title='Choose Generator.csv')
-        self._createDisplay(fileName)
+        self.fileName = askopenfilename(initialdir="./", title='Choose Generator.csv')
+        write_config_file(self.fileName)
+        # self._createDisplay(self.fileName)
+
 
 styleSheet = """
     SimWindow {
@@ -173,15 +185,15 @@ def findScreenWidth():
     size = screen.size()
     return size.width(), size.height()
 
-
+flag_draw = False
 if __name__ == '__main__':
         
     app = QApplication(sys.argv)
     app.setStyleSheet(styleSheet)
 
-
     window = SimWindow()
     window.resize(1024, 1024)
+
     # helloMsg = QLabel('<h1>Hello from outside</h1>', parent=window)
     # helloMsg.move(60, 15)
 
