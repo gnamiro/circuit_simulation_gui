@@ -141,7 +141,28 @@ class SimWindow(QMainWindow):
         self.generalLayout.addLayout(self.toolbars)
         self.generalLayout.setAlignment(self.toolbars, Qt.AlignTop)
      
-    
+    def paintEvent(self, e):
+        qp = QPainter()
+        qp.begin(self)
+        self.drawLines(qp)
+        qp.end()
+
+    def drawLines(self, qp):
+        pen = QPen(Qt.black, 2, Qt.SolidLine)
+        qp.setPen(pen)
+
+        for element in self.elementsList:
+            elementConnectionList = element.getConnections()
+            for connection in elementConnectionList:
+                if(isinstance(connection, tuple)):
+                    pass
+                else:
+                    qp.drawLines(element.x, element.y,
+                     self.elementsList[connection].x, self.elementsList[connection].y)
+
+        # qp.drawLine(20, 40, 250, 40)
+        # qp.drawLine(250, 40, 250, 250)
+
     def _createDisplay(self, fileName):
         elementData = read_csv_file(fileName)
         print(self)
@@ -150,9 +171,9 @@ class SimWindow(QMainWindow):
         for element in elementData:
             _element = self.elementFactory[element[0]](self, element[1], element[2], element[3])
             self.elementsList.append(_element)
-            # self.generalLayout.addWidget(_element.draw())
 
-        # self._centralWidget.update()
+
+
 
 
     def toggleOptionWindow(self, checked):

@@ -21,9 +21,8 @@ class Node:
     def draw(self):
         return self.label
 
-    def connection(self):
-        print('connections')
-        pass
+    def getConnection(self):
+        return self.connectionList
 
 
 class TransferLine(Node):
