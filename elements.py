@@ -16,7 +16,8 @@ class Node:
         # self.im = self.im.scaled(100, 50, Qt.KeepAspectRatio)
         self.label = QLabel(parent=parent)
         self.label.setPixmap(self.im)
-        self.label.setGeometry(self.x, self.y, 50, 60)
+        # self.label.move(x, y)
+        self.label.setGeometry(self.x, self.y, self.im.width(), self.im.height())
         self.label.setScaledContents(True)
 
     def draw(self):
@@ -71,13 +72,13 @@ if __name__ == '__main__':
     window.move(60, 15)
     layout = QHBoxLayout()
 
-    label = Transfer_line(window, 500, 600 , []).draw()
+    label = Transfer_line(window, 500, 700 , []).draw()
     label1 = CT(window, 100, 300 , []).draw()
     label2 = Bus(window, 150, 550 , []).draw()
     label3 = Ground(window, 100, 350 , []).draw()
     label4 = Transformer2Coil(window, 200, 500 , []).draw()
-    label5 = Transformer3Coil(window, 350, 500 , []).draw()
-    label6 = VSource(window, 450, 500 , []).draw()
+    label5 = Transformer3Coil(window, 350, 600 , []).draw()
+    label6 = VSource(window, 450, 550 , []).draw()
     label7 = VT(window, 50, 200 , []).draw()
     layout.addWidget(label)
     layout.addWidget(label1)

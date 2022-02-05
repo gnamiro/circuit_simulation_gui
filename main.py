@@ -5,11 +5,26 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 
 import tkinter
-# import tkFileDialog
+from tkinter.filedialog import askopenfilename
 
 import elements
 
+import csv
+import ast
 
+
+def read_csv_file(filename):
+    with open(filename, newline='') as f:
+        reader = csv.reader(f)
+        data = list(reader)
+    
+
+    for i in range(len(data)):
+        data[i][-1] = ast.literal_eval(data[i][-1])
+
+    print(type(data[0][1]))
+
+    return data
 
 class Dialog(QDialog):
     def __init__(self):
@@ -77,7 +92,6 @@ class PushButton:
 class SimWindow(QMainWindow):
     def __init__(self, parent=None):
         super().__init__()
-
         self.setWindowTitle('Simulator')
 
         self.generalLayout = QVBoxLayout()
@@ -88,7 +102,7 @@ class SimWindow(QMainWindow):
         self._centralWidget.setLayout(self.generalLayout)
 
         self._createToolBars()
-        self._createDisplay()
+        # self._createDisplay()
 
     def _createToolBars(self):
         self.optionButton = PushButton('Options', 100).getButton()
@@ -106,8 +120,10 @@ class SimWindow(QMainWindow):
         self.generalLayout.addLayout(self.toolbars)
         self.generalLayout.setAlignment(self.toolbars, Qt.AlignTop)
      
-    def _createDisplay(self):
-        pass
+    def _createDisplay(self, fileName):
+        elementsList = read_csv_file(fileName)
+
+
 
 
     def toggleOptionWindow(self, checked):
@@ -119,8 +135,8 @@ class SimWindow(QMainWindow):
     def getFileDialogWindow(self, checked):
         root = tkinter.Tk()
         root.withdraw()
-        self.filename = tkinter.filedialog.askopenfilename(initialdir="/", title='Choose Generator.csv')
-
+        fileName = askopenfilename(initialdir="/", title='Choose Generator.csv')
+        self._createDisplay(fileName)
 
 styleSheet = """
     SimWindow {
@@ -146,7 +162,7 @@ if __name__ == '__main__':
 
 
     window = SimWindow()
-    window.resize(640, 640)
+    window.resize(1024, 1024)
     # helloMsg = QLabel('<h1>Hello from outside</h1>', parent=window)
     # helloMsg.move(60, 15)
 
