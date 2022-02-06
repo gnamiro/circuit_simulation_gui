@@ -119,7 +119,7 @@ class SimWindow(QMainWindow):
             'T3C': Transformer3Coil,
             'VT': VT,
             'CT': CT,
-            'transferLine': TransferLine,
+            'TL': TransferLine,
             'Bus': Bus
         }
         print(self.fileName)
@@ -216,7 +216,7 @@ if __name__ == '__main__':
     app.setStyleSheet(styleSheet)
 
     window = SimWindow()
-    window.resize(1024, 1024)
+    window.resize(1920, 1024)
 
     # helloMsg = QLabel('<h1>Hello from outside</h1>', parent=window)
     # helloMsg.move(60, 15)
